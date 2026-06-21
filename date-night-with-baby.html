@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Date Night with Baby</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=Inter:wght@400;500&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0D0B08;--surface:#161410;--card:#1E1B16;--border:#2E2A22;--border-soft:#252118;--gold:#C9922A;--gold-dim:#7A5518;--gold-light:#F0C97A;--gold-bg:#1C1508;--cream:#F2EAD8;--muted:#7A7060;--text:#E8DFC8;--red-dim:#5C1F1F;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem 5rem;}
+.header{text-align:center;margin-bottom:2rem;}
+.eyebrow{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:0.75rem;font-weight:500;}
+.title{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:500;color:var(--cream);line-height:1.1;letter-spacing:-0.01em;}
+.title em{font-style:italic;color:var(--gold-light);}
+.tagline{font-size:0.82rem;color:var(--muted);margin-top:0.5rem;letter-spacing:0.03em;}
+.setup-notice{background:var(--gold-bg);border:1px solid var(--gold-dim);border-radius:10px;padding:0.9rem 1.1rem;max-width:560px;width:100%;margin-bottom:1.5rem;font-size:0.82rem;color:var(--gold-light);line-height:1.65;}
+.setup-notice strong{color:var(--cream);font-weight:500;}
+.setup-row{margin-top:0.5rem;display:flex;flex-direction:column;gap:4px;}
+.setup-item{display:flex;align-items:center;gap:8px;font-size:0.78rem;}
+.setup-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.setup-dot.ok{background:#3A8A4A;}
+.setup-dot.missing{background:#8A3A3A;}
+.main{width:100%;max-width:560px;display:flex;flex-direction:column;gap:1.25rem;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;}
+.card-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);font-weight:500;margin-bottom:0.9rem;}
+.avatar-section{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:2rem 1.5rem;}
+.avatar-ring{width:110px;height:110px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:52px;transition:border-color 0.4s,box-shadow 0.4s;}
+.avatar-ring.listening{border-color:var(--gold);box-shadow:0 0 0 6px rgba(201,146,42,0.12),0 0 0 14px rgba(201,146,42,0.05);animation:pulse-gold 1.5s ease-in-out infinite;}
+.avatar-ring.speaking{border-color:#3A8A4A;box-shadow:0 0 0 6px rgba(42,107,58,0.15),0 0 0 14px rgba(42,107,58,0.06);animation:pulse-green 1.3s ease-in-out infinite;}
+@keyframes pulse-gold{0%,100%{box-shadow:0 0 0 6px rgba(201,146,42,0.12),0 0 0 14px rgba(201,146,42,0.05);}50%{box-shadow:0 0 0 10px rgba(201,146,42,0.18),0 0 0 22px rgba(201,146,42,0.04);}}
+@keyframes pulse-green{0%,100%{box-shadow:0 0 0 6px rgba(42,107,58,0.15),0 0 0 14px rgba(42,107,58,0.06);}50%{box-shadow:0 0 0 10px rgba(42,107,58,0.20),0 0 0 22px rgba(42,107,58,0.04);}}
+.status-badge{font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;padding:5px 14px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--muted);transition:all 0.3s;}
+.status-badge.connected{background:rgba(42,107,58,0.15);color:#7AC88A;border-color:#2A5A34;}
+.status-badge.speaking{background:rgba(201,146,42,0.12);color:var(--gold-light);border-color:var(--gold-dim);}
+.status-badge.listening{background:rgba(40,80,160,0.15);color:#A0B8E0;border-color:#2A4A80;}
+.status-badge.error{background:rgba(140,40,40,0.15);color:#E09090;border-color:#6A2828;}
+.status-badge.saving{background:rgba(80,60,140,0.15);color:#B0A0E0;border-color:#5A4A8A;}
+.speech-bubble{width:100%;min-height:90px;background:var(--surface);border:1px solid var(--border-soft);border-radius:14px;padding:1.1rem 1.25rem;font-family:'Playfair Display',serif;font-size:1.05rem;line-height:1.65;color:var(--cream);}
+.speech-bubble.empty{color:var(--muted);font-style:italic;font-size:0.9rem;font-family:'Inter',sans-serif;}
+.memory-banner{background:var(--gold-bg);border:1px solid var(--gold-dim);border-radius:12px;padding:0.9rem 1.1rem;font-family:'Playfair Display',serif;font-style:italic;font-size:0.95rem;color:var(--gold-light);line-height:1.6;display:none;}
+.memory-banner-label{font-family:'Inter',sans-serif;font-style:normal;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold-dim);margin-bottom:0.4rem;font-weight:500;}
+.controls{display:flex;flex-direction:column;gap:0.75rem;}
+.btn{width:100%;padding:0.85rem 1.5rem;font-family:'Inter',sans-serif;font-size:0.95rem;font-weight:500;border-radius:12px;border:none;cursor:pointer;transition:all 0.2s;letter-spacing:0.01em;}
+.btn-start{background:var(--gold);color:#0D0B08;}
+.btn-start:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-start:disabled{opacity:0.35;cursor:not-allowed;transform:none;}
+.btn-end{background:transparent;color:#E09090;border:1px solid var(--red-dim);}
+.btn-end:hover{background:rgba(140,40,40,0.12);}
+.btn-debrief{background:transparent;color:var(--gold-light);border:1px solid var(--gold-dim);font-size:0.88rem;}
+.btn-debrief:hover{background:rgba(201,146,42,0.08);}
+.mic-row{display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.78rem;color:var(--muted);}
+.mic-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;}
+.mic-dot.active{background:#3A8A4A;}
+.save-status{font-size:0.72rem;color:var(--muted);text-align:center;margin-top:0.25rem;min-height:18px;}
+.save-status.ok{color:#7AC88A;}
+.save-status.err{color:#E09090;}
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0.85rem;}
+.score-tile{background:var(--surface);border:1px solid var(--border-soft);border-radius:12px;padding:1rem;}
+.score-player{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:500;margin-bottom:4px;}
+.score-num{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:500;color:var(--cream);line-height:1;margin-bottom:8px;}
+.score-btns{display:flex;gap:6px;}
+.score-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--text);transition:background 0.15s;}
+.score-btn:hover{background:var(--surface);}
+.reset-row{text-align:right;}
+.reset-btn{font-size:0.72rem;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;text-decoration-color:var(--border);padding:0;}
+.reset-btn:hover{color:#E09090;}
+.game-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.game-tag{font-size:0.78rem;padding:5px 13px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all 0.15s;font-weight:500;}
+.game-tag:hover{border-color:var(--gold-dim);color:var(--gold-light);}
+.game-tag.active{background:var(--gold);color:#0D0B08;border-color:var(--gold);}
+.melissa-panel{border:1px solid var(--gold-dim);background:var(--gold-bg);border-radius:16px;padding:1.5rem;}
+.melissa-panel .card-label{color:var(--gold-dim);}
+.insight-list{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.insight-item{display:flex;gap:10px;align-items:flex-start;font-size:0.82rem;line-height:1.55;color:var(--text);}
+.insight-dot{width:7px;height:7px;border-radius:50%;background:var(--gold-dim);margin-top:5px;flex-shrink:0;}
+.insight-item.flagged .insight-dot{background:#E09090;}
+.insight-item.positive .insight-dot{background:#7AC88A;}
+.framework-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem;}
+.fw-tag{font-size:0.7rem;padding:3px 10px;border-radius:999px;border:1px solid var(--gold-dim);color:var(--gold-light);background:transparent;font-weight:500;letter-spacing:0.04em;}
+.confidence-row{display:flex;align-items:center;gap:10px;margin-top:0.75rem;}
+.confidence-label{font-size:0.72rem;color:var(--muted);white-space:nowrap;}
+.confidence-bar-outer{flex:1;height:4px;background:var(--border);border-radius:2px;}
+.confidence-bar-inner{height:4px;background:var(--gold);border-radius:2px;transition:width 0.5s ease;}
+.confidence-val{font-size:0.72rem;color:var(--gold-light);font-weight:500;min-width:32px;text-align:right;}
+.history-list{display:flex;flex-direction:column;gap:8px;max-height:200px;overflow-y:auto;}
+.history-item{background:var(--surface);border:1px solid var(--border-soft);border-radius:10px;padding:0.75rem 1rem;font-size:0.8rem;line-height:1.55;}
+.history-meta{display:flex;gap:10px;margin-bottom:3px;flex-wrap:wrap;}
+.history-date{color:var(--muted);}
+.history-game{color:var(--gold-light);font-weight:500;}
+.history-empty{font-size:0.78rem;color:var(--border);font-style:italic;text-align:center;padding:1rem 0;}
+.log-scroll{max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;}
+.log-entry{font-size:0.78rem;color:var(--muted);line-height:1.5;padding:5px 10px;border-radius:8px;background:var(--surface);}
+.log-who{font-weight:500;color:var(--text);}
+.log-entry.baby-log{border-left:2px solid var(--gold-dim);}
+.log-entry.user-log{border-left:2px solid var(--border);}
+.log-entry.system-log{font-style:italic;color:var(--muted);background:transparent;padding-left:0;}
+.log-empty{font-size:0.78rem;color:var(--border);font-style:italic;text-align:center;padding:1rem 0;}
+.footer{margin-top:3rem;font-size:0.72rem;color:var(--border);text-align:center;line-height:1.7;}
+</style>
+</head>
+<body>
+
+<script>
+  const AGENT_ID            = "agent_8301kvnpw2jeesxb6zvrvd85vvfz";
+  const SUPABASE_URL        = "YOUR_SUPABASE_URL_HERE";
+  const SUPABASE_ANON_KEY   = "YOUR_SUPABASE_ANON_KEY_HERE";
+  const N8N_SESSION_WEBHOOK = "YOUR_N8N_SESSION_WEBHOOK_URL_HERE";
+  const N8N_COACHING_WEBHOOK= "YOUR_N8N_COACHING_WEBHOOK_URL_HERE";
+</script>
+
+<header class="header">
+  <div class="eyebrow">A couples enrichment experience</div>
+  <h1 class="title">Date Night<br><em>with Baby</em></h1>
+  <p class="tagline">Games, conversation, and one very opinionated Morkie</p>
+</header>
+
+<div class="setup-notice" id="setup-notice">
+  <strong>Setup status</strong> — open this file in a text editor and fill in the credentials at the top.
+  <div class="setup-row" id="setup-row"></div>
+</div>
+
+<main class="main" role="main">
+
+  <div class="memory-banner" id="memory-banner">
+    <div class="memory-banner-label">Baby remembers from last time</div>
+    <span id="memory-text"></span>
+  </div>
+
+  <div class="card avatar-section">
+    <div class="avatar-ring" id="avatar-ring">🐾</div>
+    <div class="status-badge" id="status-badge">Not connected</div>
+    <div class="speech-bubble empty" id="speech-bubble" aria-live="polite">
+      Baby is sitting by the door. She has been ready since 6pm. She has opinions about punctuality.
+    </div>
+  </div>
+
+  <div class="card controls">
+    <button class="btn btn-start" id="connect-btn" onclick="startSession()">Start date night with Baby</button>
+    <button class="btn btn-debrief" id="debrief-btn" onclick="requestDebrief()" style="display:none">Ask Baby for end-of-night recap</button>
+    <button class="btn btn-end" id="end-btn" onclick="endSession()" style="display:none">End session &amp; save to memory</button>
+    <div class="mic-row">
+      <div class="mic-dot" id="mic-dot"></div>
+      <span id="mic-label">Microphone inactive</span>
+    </div>
+    <div class="save-status" id="save-status"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Tonight's game</div>
+    <div class="game-tags">
+      <button class="game-tag" onclick="selectGame(this,'Chess')">Chess</button>
+      <button class="game-tag" onclick="selectGame(this,'Poker')">Poker</button>
+      <button class="game-tag" onclick="selectGame(this,'Euchre')">Euchre</button>
+      <button class="game-tag" onclick="selectGame(this,'Crazy Eights')">Crazy Eights</button>
+      <button class="game-tag" onclick="selectGame(this,'Yahtzee')">Yahtzee</button>
+      <button class="game-tag" onclick="selectGame(this,'Farkle')">Farkle</button>
+      <button class="game-tag" onclick="selectGame(this,'Trivia')">Trivia</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Scoreboard</div>
+    <div class="score-grid">
+      <div class="score-tile">
+        <div class="score-player">Melissa</div>
+        <div class="score-num" id="score-melissa">0</div>
+        <div class="score-btns">
+          <button class="score-btn" onclick="adjustScore('melissa',1)">+</button>
+          <button class="score-btn" onclick="adjustScore('melissa',-1)">-</button>
+        </div>
+      </div>
+      <div class="score-tile">
+        <div class="score-player">Doug</div>
+        <div class="score-num" id="score-doug">0</div>
+        <div class="score-btns">
+          <button class="score-btn" onclick="adjustScore('doug',1)">+</button>
+          <button class="score-btn" onclick="adjustScore('doug',-1)">-</button>
+        </div>
+      </div>
+    </div>
+    <div class="reset-row"><button class="reset-btn" onclick="resetScores()">Reset scores</button></div>
+  </div>
+
+  <div class="melissa-panel">
+    <div class="card-label">Coaching observations — Melissa only</div>
+    <div class="framework-tags">
+      <span class="fw-tag">Listening blocks</span>
+      <span class="fw-tag">Assertive delay</span>
+      <span class="fw-tag">RAVEN</span>
+      <span class="fw-tag">Compromise</span>
+    </div>
+    <div class="insight-list" id="insight-list">
+      <div class="insight-item neutral"><div class="insight-dot"></div><span>Session not yet started. Coaching observations will appear here as Baby speaks.</span></div>
+    </div>
+    <div class="confidence-row">
+      <span class="confidence-label">Session rapport</span>
+      <div class="confidence-bar-outer"><div class="confidence-bar-inner" id="rapport-bar" style="width:0%"></div></div>
+      <span class="confidence-val" id="rapport-val">-</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Past sessions</div>
+    <div class="history-list" id="history-list">
+      <div class="history-empty" id="history-empty">Add Supabase credentials to see past sessions.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Tonight's log</div>
+    <div class="log-scroll" id="log-scroll">
+      <div class="log-empty" id="log-empty">Baby's commentary will appear here once you start.</div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Date Night with Baby - Powered by ElevenLabs, Supabase, and n8n<br>
+  Baby is a Morkie. She has no further comment.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@11labs/client@latest/dist/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<script>
+const CONFIG = {
+  elevenlabs: AGENT_ID !== "YOUR_AGENT_ID_HERE",
+  supabase:   SUPABASE_URL !== "YOUR_SUPABASE_URL_HERE",
+  n8nSession: N8N_SESSION_WEBHOOK !== "YOUR_N8N_SESSION_WEBHOOK_URL_HERE",
+  n8nCoach:   N8N_COACHING_WEBHOOK !== "YOUR_N8N_COACHING_WEBHOOK_URL_HERE",
+};
+const CONFIG_LABELS = {
+  elevenlabs:"ElevenLabs Agent ID",
+  supabase:"Supabase URL and anon key",
+  n8nSession:"n8n session save webhook",
+  n8nCoach:"n8n coaching digest webhook"
+};
+
+let supabaseClient = null;
+let conversation   = null;
+let scores         = {melissa:0,doug:0};
+let activeGame     = null;
+let sessionActive  = false;
+let messageCount   = 0;
+let rapport        = 0;
+let sessionInsights= [];
+
+const coachingSignals = [
+  {pattern:/listen/i,                                type:'neutral', framework:'listening-blocks',label:'Listening observation noted by Baby'},
+  {pattern:/breath|breathe|water break/i,            type:'neutral', framework:'assertive-delay', label:'Assertive delay moment created'},
+  {pattern:/both sides|both.*valid|both.*reasonable/i,type:'positive',framework:'raven',          label:'RAVEN - Validate step modeled'},
+  {pattern:/finish.*sentence|let.*finish|baby.*rule/i,type:'flagged', framework:'listening-blocks',label:'Listening block interrupted - interrupting or derailing detected'},
+  {pattern:/planning.*next|already.*planning/i,      type:'flagged', framework:'listening-blocks',label:'Rehearsing block flagged (coded as game strategy tip)'},
+  {pattern:/coin flip|take turns|veto|split/i,       type:'positive',framework:'compromise',      label:'Compromise strategy offered'},
+  {pattern:/listening game|strong tonight/i,         type:'positive',framework:'listening-blocks',label:'Debrief - Melissa listening skills highlighted'},
+  {pattern:/watch.*next time|something to watch/i,   type:'flagged', framework:'listening-blocks',label:'Debrief - growth area for Doug noted'},
+  {pattern:/values|what.*matter|honor.*need/i,       type:'positive',framework:'raven',           label:'RAVEN - Examine values step delivered'},
+];
+
+window.addEventListener('DOMContentLoaded', () => {
+  const notice  = document.getElementById('setup-notice');
+  const row     = document.getElementById('setup-row');
+  const allGood = Object.values(CONFIG).every(Boolean);
+  if (allGood) { notice.style.display='none'; }
+  else {
+    Object.entries(CONFIG).forEach(([k,ok]) => {
+      const d = document.createElement('div');
+      d.className = 'setup-item';
+      d.innerHTML = '<div class="setup-dot '+(ok?'ok':'missing')+'"></div><span>'+(ok?'Connected':'Missing')+': '+CONFIG_LABELS[k]+'</span>';
+      row.appendChild(d);
+    });
+  }
+  if (CONFIG.supabase) {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    loadHistory();
+    loadLatestMemory();
+  }
+});
+
+async function loadHistory() {
+  if (!supabaseClient) return;
+  const {data,error} = await supabaseClient.from('sessions').select('played_at,game,score_melissa,score_doug,winner').order('played_at',{ascending:false}).limit(8);
+  const list = document.getElementById('history-list');
+  const empty = document.getElementById('history-empty');
+  if (error || !data || data.length===0) { if(empty) empty.textContent='No past sessions yet. Tonight will be the first!'; return; }
+  if (empty) empty.remove();
+  list.innerHTML='';
+  data.forEach(s => {
+    const date = new Date(s.played_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const el = document.createElement('div');
+    el.className='history-item';
+    el.innerHTML='<div class="history-meta"><span class="history-date">'+date+'</span><span class="history-game">'+(s.game||'Game')+'</span></div><div class="history-scores">Melissa '+(s.score_melissa||0)+' - Doug '+(s.score_doug||0)+(s.winner?' - '+s.winner+' won':'')+'</div>';
+    list.appendChild(el);
+  });
+}
+
+async function loadLatestMemory() {
+  if (!supabaseClient) return;
+  const {data} = await supabaseClient.from('memory_jar').select('memory_text').order('created_at',{ascending:false}).limit(1).single();
+  if (!data) return;
+  document.getElementById('memory-text').textContent = data.memory_text;
+  document.getElementById('memory-banner').style.display='block';
+}
+
+async function saveSession() {
+  const winner = scores.melissa>scores.doug?'Melissa':scores.doug>scores.melissa?'Doug':'Tie';
+  const payload = {game:activeGame||'Unknown',score_melissa:scores.melissa,score_doug:scores.doug,winner,summary:activeGame+' session. Melissa '+scores.melissa+', Doug '+scores.doug+'. Rapport: '+Math.round(rapport/10)+'/10.'};
+  setSaveStatus('Saving to memory...','');
+  let sessionId = null;
+  if (supabaseClient) {
+    try {
+      const {data,error} = await supabaseClient.from('sessions').insert([payload]).select('id').single();
+      if (!error && data) {
+        sessionId = data.id;
+        if (sessionInsights.length>0) {
+          await supabaseClient.from('coaching_observations').insert(sessionInsights.map(i=>({session_id:sessionId,observation_type:i.type,observation_text:i.label,framework:i.framework})));
+        }
+        if (scores.melissa>0||scores.doug>0) {
+          const mems=['Baby hosted '+payload.game+' tonight. '+winner+' won. She called it early.',''+winner+' took the '+payload.game+' victory. Baby was not surprised. She is never surprised.','Another legendary '+payload.game+' session. '+winner+' won. Baby gave a dignified nod.'];
+          await supabaseClient.from('memory_jar').insert([{memory_text:mems[Math.floor(Math.random()*mems.length)],game:payload.game,tagged_player:winner}]);
+        }
+        setSaveStatus('Saved to Baby\'s memory','ok');
+        loadHistory();
+      } else { setSaveStatus('Supabase save error - check console','err'); console.error(error); }
+    } catch(e) { setSaveStatus('Save failed - check console','err'); console.error(e); }
+  }
+  if (CONFIG.n8nSession) { try { await fetch(N8N_SESSION_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,session_id:sessionId})}); } catch(e){console.error(e);} }
+  if (CONFIG.n8nCoach && sessionInsights.length>0) { try { await fetch(N8N_COACHING_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:sessionId,game:payload.game,observations:sessionInsights,rapport,scores})}); } catch(e){console.error(e);} }
+}
+
+function setSaveStatus(t,c){const e=document.getElementById('save-status');e.textContent=t;e.className='save-status '+c;}
+function setStatus(t,c){const b=document.getElementById('status-badge');b.textContent=t;b.className='status-badge '+(c||'');}
+function setAvatar(c){document.getElementById('avatar-ring').className='avatar-ring '+(c||'');}
+function setSpeech(t,e){const b=document.getElementById('speech-bubble');b.textContent=t;b.className=e?'speech-bubble empty':'speech-bubble';}
+function setMic(a){document.getElementById('mic-dot').className='mic-dot'+(a?' active':'');document.getElementById('mic-label').textContent=a?'Microphone active - speak now':'Microphone inactive';}
+
+function addLog(text,type){
+  const scroll=document.getElementById('log-scroll');
+  const empty=document.getElementById('log-empty');
+  if(empty) empty.remove();
+  const el=document.createElement('div');
+  el.className='log-entry '+(type||'system-log');
+  if(type==='baby-log') el.innerHTML='<span class="log-who">Baby:</span> '+text;
+  else if(type==='user-log') el.innerHTML='<span class="log-who">Room:</span> '+text;
+  else el.textContent=text;
+  scroll.appendChild(el);
+  scroll.scrollTop=scroll.scrollHeight;
+}
+
+function addInsight(label,type,framework){
+  const list=document.getElementById('insight-list');
+  if(list.children.length===1 && list.children[0].textContent.includes('not yet started')) list.innerHTML='';
+  const el=document.createElement('div');
+  el.className='insight-item '+(type||'neutral');
+  el.innerHTML='<div class="insight-dot"></div><span>'+label+'</span>';
+  list.appendChild(el);
+  sessionInsights.push({type,framework,label});
+}
+
+function updateRapport(d){
+  rapport=Math.min(100,Math.max(0,rapport+d));
+  document.getElementById('rapport-bar').style.width=rapport+'%';
+  document.getElementById('rapport-val').textContent=Math.round(rapport/10)+'/10';
+}
+
+function scanForCoaching(text){
+  coachingSignals.forEach(sig=>{
+    if(sig.pattern.test(text)){
+      addInsight(sig.label,sig.type,sig.framework);
+      updateRapport(sig.type==='positive'?8:sig.type==='flagged'?2:4);
+    }
+  });
+}
+
+function adjustScore(p,d){scores[p]=Math.max(0,scores[p]+d);document.getElementById('score-'+p).textContent=scores[p];}
+function resetScores(){scores={melissa:0,doug:0};document.getElementById('score-melissa').textContent='0';document.getElementById('score-doug').textContent='0';}
+function selectGame(btn,name){document.querySelectorAll('.game-tag').forEach(t=>t.classList.remove('active'));activeGame=activeGame===name?null:name;if(activeGame)btn.classList.add('active');}
+function requestDebrief(){addLog('Say "end of night" or "game over" to Baby to trigger her full debrief.','system-log');}
+
+async function startSession(){
+  const btn=document.getElementById('connect-btn');
+  btn.disabled=true;
+  setStatus('Connecting...');
+  setSpeech('Baby is on her way to the table...', true);
+  sessionInsights=[];
+  rapport=0;
+  setSaveStatus('','');
+  try {
+    await navigator.mediaDevices.getUserMedia({audio:true});
+    conversation = await ElevenLabs.Conversation.startSession({
+      agentId: AGENT_ID,
+      onConnect:()=>{
+        sessionActive=true;setStatus('Connected','connected');setAvatar('');
+        btn.style.display='none';
+        document.getElementById('debrief-btn').style.display='block';
+        document.getElementById('end-btn').style.display='block';
+        addLog('Baby has joined the table. Session started.','system-log');
+        updateRapport(10);
+      },
+      onDisconnect:async()=>{
+        sessionActive=false;setStatus('Saving...','saving');setAvatar('');setMic(false);
+        setSpeech('Baby has left the table. She needs a nap. She earned it.',true);
+        btn.disabled=false;btn.style.display='block';
+        document.getElementById('debrief-btn').style.display='none';
+        document.getElementById('end-btn').style.display='none';
+        addLog('Session ended. Saving to memory...','system-log');
+        await saveSession();
+        setStatus('Not connected');
+        conversation=null;
+      },
+      onError:(e)=>{
+        console.error(e);setStatus('Connection error','error');
+        setSpeech('Something went wrong. Baby is staring at the router.',false);
+        btn.disabled=false;
+        addLog('Error: '+(e.message||'Unknown'),'system-log');
+      },
+      onModeChange:(m)=>{
+        if(m.mode==='speaking'){setStatus('Baby is speaking','speaking');setAvatar('speaking');setMic(false);}
+        else if(m.mode==='listening'){setStatus('Baby is listening','listening');setAvatar('listening');setMic(true);}
+      },
+      onMessage:(msg)=>{
+        messageCount++;
+        if(msg.source==='ai'){
+          setSpeech(msg.message,false);
+          addLog(msg.message,'baby-log');
+          scanForCoaching(msg.message);
+          if(messageCount%4===0)updateRapport(3);
+        } else if(msg.source==='user'){
+          addLog(msg.message,'user-log');
+        }
+      },
+    });
+  } catch(err){
+    console.error(err);
+    setStatus('Microphone error','error');
+    setSpeech('Baby needs microphone permission. Please allow access and try again.',false);
+    btn.disabled=false;
+  }
+}
+
+async function endSession(){if(conversation)await conversation.endSession();}
+</script>
+</body>
+</html>
